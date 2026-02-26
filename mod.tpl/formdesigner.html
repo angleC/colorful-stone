@@ -1,0 +1,95 @@
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">表单设计器</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href=""></a></li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a id="saveJson" href="#" class="saveJson">保存</a>
+            </li>
+            <li class="layui-nav-item">
+                <a id="btnImportJson" href="#" class="importJson">导入数据</a>
+            </li>
+            <li class="layui-nav-item">
+                <a id="btnExportJson" href="#" class="exportJson">导出数据</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="#" class="previewForm">预览</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="#" class="generateCode">生成代码</a>
+            </li>
+        </ul>
+    </div>
+    <div class="layui-side">
+        <div class="layui-side-scroll" style="width: 260px;">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <div class="layui-tab layui-tab-brief" lay-filter="components-list">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">组件</li>
+                    <li class="">模板</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div class="components-list" id="components-form-list">
+                        </div>
+                    </div>
+                    <div class="layui-tab-item">
+                        <div id="template-form-list" class="components-list">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <form class="layui-form layui-form-pane" style="height:98%;">
+            <div class="layui-form sortable-container" id="formDesignerForm" lay-filter="formDesignerForm">
+                <div class="layui-row layui-empty">
+                    从左侧拖拽控件到此设计区域来添加字段
+                </div>
+            </div>
+            <button type="button" class="layui-btn" style="display: none" lay-submit lay-filter="*">立即提交</button>
+        </form>
+    </div>
+    <div class="layui-side-right">
+        <div class="layui-side-scroll" style="width: 350px;">
+            <!-- 属性导航 -->
+            <form class="layui-form  layui-form-pane">
+                <div class="layui-tab layui-tab-brief" lay-filter="form-attr">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">字段设置</li>
+                        <li>表单设置</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show" id="columnProperty">
+                        </div>
+                        <div class="layui-tab-item" id="formProperty">
+                            <!--表单ID-->
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">表单ID</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="formId" required="" lay-verify="required"
+                                        placeholder="请输入表单ID" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <!--//表单ID-->
+                            <!--表单名称-->
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">表单名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="formName" required="" lay-verify="required"
+                                        placeholder="请输入表单名称" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <!--//end-->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+{
+  "id": "-1",
+  "index": "-1",
+  "label": "按钮",
+  "tag": "input",
+  "type":"button",
+  "tagIcon": "input",
+  "width": "100%",
+  "readonly": false,
+  "disabled": false,
+  "required": true,
+  "hideLabel": false,
+  "expression": "",
+  "document": "",
+  "class":""
+}

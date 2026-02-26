@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th=http://www.thymeleaf.org>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=0,maximum-scale=0,user-scalable=yes,shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>表单设计器</title>
+
+    <script type="text/javascript" src="./layui-v2.13.3/layui.js"></script>
+    <script type="text/javascript" src="./js/config.js"></script>
+    <script type="text/javascript" src="./js/component.js"></script>
+    <script type="text/javascript" src="./js/modules/Sortable/Sortable.js"> </script>
+</head>
+<style>
+    .container {
+        margin: 20px;
+    }
+
+    #result {
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        min-height: 100px;
+        white-space: pre-wrap;
+        /* 保留换行和空格 */
+    }
+</style>
+
+<body>
+    <component id="test-component">这是一个自定义组件</component>
+    <div class="container">
+        <!-- 文件选择控件 -->
+        <input type="file" id="fileInput" accept=".txt,.json,.csv">
+        <button onclick="readFile()">读取文件</button>
+        <!-- 展示读取结果 -->
+        <div id="result"></div>
+    </div>
+    <script>
+        // 存储选中的文件对象
+        let selectedFile = null;
+
+        // 监听文件选择事件，获取文件对象
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            // 获取用户选中的第一个文件
+            selectedFile = e.target.files[0];
+            if (!selectedFile) {
+                alert('请选择一个文件！');
+                return;
+            }
+            console.log('选中的文件：', selectedFile);
+        });
+
+        // 核心读取文件函数
+        function readFile() {
+            if (!selectedFile) {
+                alert('请先选择文件！');
+                return;
+            }
+
+            // 1. 创建 FileReader 实例
+            const reader = new FileReader();
+
+            // 2. 监听读取完成事件（成功）
+            reader.onload = function (e) {
+                console.log(e);
+                // e.target.result 是读取到的文件内容
+                const content = e.target.result;
+                // 展示结果到页面
+                document.getElementById('result').textContent = content;
+                console.log('文件内容：', content);
+            };
+
+            // 3. 监听读取错误事件
+            reader.onerror = function () {
+                alert('文件读取失败：' + reader.error.message);
+            };
+
+            // 4. 根据文件类型选择读取方式（这里以文本为例）
+            // readAsText：读取为文本（支持指定编码，默认 UTF-8）
+            // readAsDataURL：读取为 Base64 编码（适合图片、视频等）
+            // readAsArrayBuffer：读取为二进制数组（适合处理二进制文件）
+            reader.readAsText(selectedFile, 'UTF-8');
+        }
+
+        /**
+        * 定时删除指定元素
+        * @param {string|HTMLElement} element - 元素选择器或DOM元素对象
+        * @param {number} delay - 延迟时间（毫秒），默认3000ms
+        */
+        function deleteElementWithTimer(element, delay = 3000) {
+            // 统一获取DOM元素
+            let target;
+            if (typeof element === 'string') {
+                target = layui.$(element);
+            } else if (element instanceof HTMLElement) {
+                target = element;
+            }
+
+            // 检查元素是否存在
+            if (!target) {
+                console.warn('要删除的元素不存在');
+                return;
+            }
+
+            // 设置定时器，延迟后删除元素
+            const timer = setTimeout(() => {
+                // 从父节点移除当前元素（推荐方式）
+                // target.parentNode.removeChild(target);
+                // 也可以用 target.remove() (现代浏览器支持)
+                // target.remove();
+                const el = document.getElementById('test-component');
+                
+                if (el) {
+                    var $el = layui.$(el);
+                    $el.attr('title','测试组件信息');
+
+                    $el.remove();
+                }
+                // console.log('元素已成功删除');
+                // 清除定时器（非必需，但属于最佳实践）
+                clearTimeout(timer);
+            }, delay);
+
+            // 返回定时器ID，方便需要时提前取消删除
+            return timer;
+        }
+
+        // 调用示例：3秒后删除id为targetElement的元素
+        const deleteTimer = deleteElementWithTimer('#test-component', 3000);
+
+    </script>
+</body>
+
+</html>

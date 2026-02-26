@@ -1,0 +1,23 @@
+{
+    "id": "-1",
+    "index": "-1",
+    "label": "单行文本",
+    "tag": "panel",
+    "type": "panel",
+    "tagIcon": "panel",
+    "defaultValue": null,
+    "labelWidth": 110,
+    "width": "100%",
+    "clearable": true,
+    "maxlength": null,
+    "showWordLimit": false,
+    "readonly": false,
+    "disabled": false,
+    "required": true,
+    "hideLabel": false,
+    "expression": "",
+    "document": "",
+    "class": "",
+    "minHeight": "50px",
+    "minWidth": "100px"
+}

@@ -1,0 +1,16 @@
+{
+    "id": "-1",
+    "index": "-1",
+    "title": "单行文本",
+    "tag": "card",
+    "type": "card",
+    "tagIcon": "card",
+    "maxlength": null,
+    "readonly": false,
+    "disabled": false,
+    "expression": "",
+    "document": "",
+    "class": "",
+    "minHeight": "50px",
+    "minWidth": "100px"
+}

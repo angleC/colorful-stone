@@ -2,7 +2,7 @@
     "id": "-1",
     "index": "-1",
     "label": "单行文本",
-    "tag": "panel",
+    "key": "panel",
     "type": "panel",
     "tagIcon": "panel",
     "defaultValue": null,

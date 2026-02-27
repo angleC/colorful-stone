@@ -89,19 +89,9 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
     Class.prototype.loadDesignerContainer = function () {
         var that = this;
         var options = that.config;
-        var designerContainer = controls.getControl('container', 'designerContainer');
-        var tplOpts = {
-            tplUrl: options.designerContainerTpl,
-            data: designerContainer,
-            showLoading: true,
-            success: function (html) {
-                var $html = $(html);
-                $('#' + options.mainBodyId).append($html);
+        var designerContainer = controls.getControl('designer', 'container');
 
-                that.initTargetSortable($html[0]);
-            }
-        }
-        tplLoader.render(tplOpts);
+        that.renderComponent(designerContainer, null, $('#' + options.mainBodyId));
     }
 
     Class.prototype.bindSortable = function () {
@@ -158,8 +148,6 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
             onAdd: function (evt) {
                 console.log('tarFormDesigner::onAdd', evt);
 
-                var groupid = evt.from.id;
-                var tag = evt.item.dataset.tag;
                 var id = evt.item.dataset.id;
                 var tmp = evt.item;
                 // if (options.data === undefined) {
@@ -179,12 +167,7 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
                     // that.deleteJsonItem(options.data, evt.item.dataset.id);
                     // options.data.splice(evt.newIndex + 1, 0, _item);
                 } else {
-                    var control = controls.getControl(groupid, tag);
-                    if (undefined == control) {
-                        return;
-                    }
-
-                    that.renderComponent(evt, control);
+                    that.renderDragComponent(evt);
                     // /* 向现有的表单数据中增加新的数组元素 splice */
                     // var _newitem = that.components[evt.item.dataset.tag].jsonData(_id, evt.newIndex, that);
                     // //如果是 grid 呢，需要知道几列
@@ -205,32 +188,49 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
             }
         });
     }
-
-    Class.prototype.renderComponent = function (evt, ctrConfig) {
+    /**
+     * 渲染拖动组件
+     * @param {拖拽组件事件参数} evt 
+     * @param {组件配置} ctrConfig 
+     */
+    Class.prototype.renderDragComponent = function (evt) {
         var that = this;
-        var tag = ctrConfig.key;
+
         const item = evt.item;
         const tarItem = evt.to;
+        var groupid = evt.from.id;
+        var tag = item.dataset.key;
+        var control = controls.getControl(tag, groupid);
+        if (undefined == control) {
+            return;
+        }
+        const $item = $(item);
+        const $tarItem = $(tarItem);
+
+        that.renderComponent(control, $item, $tarItem);
+    }
+    /**
+     * 渲染组件
+     * @param {组件配置} ctrConfig 
+     * @param {组件dom元素} $item 
+     * @param {目标容器dom元素} $tarItem 
+     */
+    Class.prototype.renderComponent = function (ctrConfig, $item, $tarItem) {
+        var that = this;
+        if (undefined == ctrConfig || null == ctrConfig) {
+            return;
+        }
+        var key = ctrConfig.key;
         var options = {
             control: ctrConfig,
             updateProperty: function (properties) {
-                var _id = that.generateId(tag);
+                var _id = that.generateId(key);
                 properties.id = _id;
             },
             success: function (_html, properties) {
-                console.info(properties);
-                const $item = $(item);
-                const $tarItem = $(tarItem);
-                const $html = $(_html);
-                // var _id = that.generateId(tag);
-                // $html.attr({
-                //     'id': _id
-                // });
-                // const $tag = $(`<div class="select-drag" data-ctrl="${tag}"></>`);
-                // $tag.append($html);
-                const $tag = $html;
-                const $prevSibling = $item.prev();
-                if ($prevSibling.length > 0) {
+                const $tag = $(_html);
+                const $prevSibling = $item === undefined || null == $item ? null : $item.prev();
+                if ($prevSibling && $prevSibling.length > 0) {
                     // 有上一个元素：插入到上一个元素之后
                     $tag.insertAfter($prevSibling);
                 } else {
@@ -238,19 +238,21 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
                     $tag.prependTo($tarItem);
                 }
 
-                $item.remove();
+                if (undefined != $item && null != $item) {
+                    $item.remove();
+                }
 
                 that.selectItem($tag, true);
 
-                that.config.viewModel.push(properties);
+                that.updateViewModel(properties, key === 'designer');
 
                 that.bindClick();//绑定按钮事件
 
                 that.initAllTargetSortable();
             }
         }
-        let scripturl = ctrConfig.url + `/${tag}.js`;
-        moduleInvoker.loadScriptAndCallModule(scripturl, tag, 'render', options).then((result) => {
+        let scripturl = ctrConfig.url + `/${key}.js`;
+        moduleInvoker.loadScriptAndCallModule(scripturl, key, 'render', options).then((result) => {
             console.log('组件渲染完成', result);
         });
     }
@@ -289,8 +291,10 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
             return;
         }
 
-        const tActionUrl = (that.config.topAction || false) ? `/mod.tpl/action/topaction.html` : '';
-        const bActionUrl = (that.config.bottomAction || false) ? `/mod.tpl/action/bottomaction.html` : '';
+        var key = $item.data('key');
+        var control = controls.getControl(key);
+        const tActionUrl = (control.topAction || false) ? `/mod.tpl/action/topaction.html` : '';
+        const bActionUrl = (control.bottomAction || false) ? `/mod.tpl/action/bottomaction.html` : '';
         var options = {
             htmlUrls: [
                 tActionUrl,
@@ -380,7 +384,10 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
      * @param {组件dom元素} $cmp 
      */
     Class.prototype.deleteComponent = function ($cmp) {
+        var that = this;
         $cmp.remove();
+
+        that.deleteViewModel($cmp.data('id'));//删除对应组件
     }
     /**
      * 清除所有选中样式
@@ -424,7 +431,6 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
             //当 div 为嵌套关系的时候 阻止事件冒泡
             e.preventDefault();
             e.stopPropagation();
-            console.info(e);
 
             var $tar = $(this);
             // var clsName = cls.replace('.', '');
@@ -507,19 +513,67 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
             tplLoader.render(tplOpts);
         });
     }
+    /**
+     * 更新视图模型
+     * @param {组件属性} ctrProperties 
+     */
+    Class.prototype.updateViewModel = function (ctrProperties, isRoot) {
+        var that = this;
+        var options = that.config;
+        var viewModel = options.viewModel;
+        var isRoot = isRoot || false;
+
+        if (isRoot) {
+            that.config.viewModel = $.extend(true, {}, viewModel, ctrProperties);
+            return;
+        }
+
+        var widgets = viewModel.widgets || [];
+        const isExist = false;
+        if (widgets.length > 0) {
+            widgets.forEach(function (w) {
+                if (w.id === ctrProperties.id) {
+                    w = $.extend(true, {}, w, ctrProperties);
+                    isExist = true;
+                    return false;
+                }
+            });
+        }
+
+        if (!isExist) {
+            widgets.push(ctrProperties);
+
+            that.config.viewModel.widgets = widgets;
+        }
+    }
+    /**
+     * 从视图模型中删除组件
+     * @param {组件id} ctrId 
+     */
+    Class.prototype.deleteViewModel = function (ctrId) {
+        var that = this;
+        var options = that.config;
+        var viewModel = options.viewModel;
+        var widgets = viewModel.widgets || [];
+        if (widgets.length > 0) {
+            widgets.forEach(function (w) {
+                if (w.id === ctrId) {
+                    widgets.splice(widgets.indexOf(w), 1);
+                    return false;
+                }
+            });
+        }
+    }
 
     Class.prototype.config = {
         version: '1.0.0',
         data: [],//记录数据信息
-        viewModel: [],//记录视图模型
+        viewModel: {},//记录视图模型
         generateId: 0,//组件自增加id
         selItems: [],//选中的元素项
         isview: false, //标记是否为视图模式还是设计模式
-        topAction: false,//是否加载顶部操作模板
-        bottomAction: true,//是否加载底部操作模板
         cmpNodeName: 'x-component',
         sortableContainer: '.sortable-container',//拖拽容器标记
-        designerContainerTpl: './mod.tpl/desingerContainer/desingerContainer.html',//设计区容器模板
         mainBodyId: 'main-body',//设计区主体容器ID
     }
 

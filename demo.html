@@ -84,51 +84,63 @@
             reader.readAsText(selectedFile, 'UTF-8');
         }
 
-        /**
-        * 定时删除指定元素
-        * @param {string|HTMLElement} element - 元素选择器或DOM元素对象
-        * @param {number} delay - 延迟时间（毫秒），默认3000ms
-        */
-        function deleteElementWithTimer(element, delay = 3000) {
-            // 统一获取DOM元素
-            let target;
-            if (typeof element === 'string') {
-                target = layui.$(element);
-            } else if (element instanceof HTMLElement) {
-                target = element;
-            }
+        // /**
+        // * 定时删除指定元素
+        // * @param {string|HTMLElement} element - 元素选择器或DOM元素对象
+        // * @param {number} delay - 延迟时间（毫秒），默认3000ms
+        // */
+        // function deleteElementWithTimer(element, delay = 3000) {
+        //     // 统一获取DOM元素
+        //     let target;
+        //     if (typeof element === 'string') {
+        //         target = layui.$(element);
+        //     } else if (element instanceof HTMLElement) {
+        //         target = element;
+        //     }
 
-            // 检查元素是否存在
-            if (!target) {
-                console.warn('要删除的元素不存在');
-                return;
-            }
+        //     // 检查元素是否存在
+        //     if (!target) {
+        //         console.warn('要删除的元素不存在');
+        //         return;
+        //     }
 
-            // 设置定时器，延迟后删除元素
-            const timer = setTimeout(() => {
-                // 从父节点移除当前元素（推荐方式）
-                // target.parentNode.removeChild(target);
-                // 也可以用 target.remove() (现代浏览器支持)
-                // target.remove();
-                const el = document.getElementById('test-component');
+        //     // 设置定时器，延迟后删除元素
+        //     const timer = setTimeout(() => {
+        //         // 从父节点移除当前元素（推荐方式）
+        //         // target.parentNode.removeChild(target);
+        //         // 也可以用 target.remove() (现代浏览器支持)
+        //         // target.remove();
+        //         const el = document.getElementById('test-component');
                 
-                if (el) {
-                    var $el = layui.$(el);
-                    $el.attr('title','测试组件信息');
+        //         if (el) {
+        //             var $el = layui.$(el);
+        //             $el.attr('title','测试组件信息');
 
-                    $el.remove();
-                }
-                // console.log('元素已成功删除');
-                // 清除定时器（非必需，但属于最佳实践）
-                clearTimeout(timer);
-            }, delay);
+        //             $el.remove();
+        //         }
+        //         // console.log('元素已成功删除');
+        //         // 清除定时器（非必需，但属于最佳实践）
+        //         clearTimeout(timer);
+        //     }, delay);
 
-            // 返回定时器ID，方便需要时提前取消删除
-            return timer;
-        }
+        //     // 返回定时器ID，方便需要时提前取消删除
+        //     return timer;
+        // }
 
         // 调用示例：3秒后删除id为targetElement的元素
-        const deleteTimer = deleteElementWithTimer('#test-component', 3000);
+        // const deleteTimer = deleteElementWithTimer('#test-component', 3000);
+
+        var formDesigner = {
+            mainBodyId: 'mainBody',
+            viewModel: {
+                name: '测试表单设计器',
+                controls: []
+            }
+        };
+
+        var options = formDesigner.viewModel;
+
+        options['name'] = '测试表单设计器2';
 
     </script>
 </body>

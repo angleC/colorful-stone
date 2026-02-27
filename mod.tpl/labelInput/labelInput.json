@@ -2,7 +2,7 @@
   "id": "-1",
   "index": "-1",
   "label": "单行文本",
-  "tag": "labelInput",
+  "key": "labelInput",
   "type":"text",
   "tagIcon": "input",
   "placeholder": "请输入",

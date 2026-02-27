@@ -12,50 +12,65 @@ layui.define(function (exports) {
                         key: 'label',
                         name: '标签',
                         icon: 'layui-icon layui-icon-note',
-                        url: 'mod.tpl/label'
-                    },  
+                        url: 'mod.tpl/label',                        
+                        bottomAction: true,//是否加载底部操作模板
+                    },
                     {
                         key: 'input',
                         name: '文本框',
                         icon: 'layui-icon layui-icon-layer',
-                        url: 'mod.tpl/input'
-                    },  
+                        url: 'mod.tpl/input',                        
+                        bottomAction: true,//是否加载底部操作模板
+                    },
                     {
                         key: 'labelInput',
                         name: '标签文本框',
                         icon: 'layui-icon layui-icon-form',
-                        url: 'mod.tpl/labelInput'
-                    },                 
+                        url: 'mod.tpl/labelInput',                        
+                        bottomAction: true,//是否加载底部操作模板
+                    },
                     {
                         key: 'button',
                         name: '按钮',
                         icon: 'layui-icon layui-icon-layer',
-                        url: 'mod.tpl/button'
+                        url: 'mod.tpl/button',                        
+                        bottomAction: true,//是否加载底部操作模板
                     }
                 ]
-            },            
+            },
             {
                 id: 'container',
                 label: '容器组件',
                 controls: [
                     {
-                        key: 'designerContainer',
+                        key: 'designer',
                         name: '设计区容器',
                         icon: 'layui-icon layui-icon-layer',
-                        url: 'mod.tpl/designerContainer',
-                        isvisible: false//是否在控件面板显示，默认显示
+                        url: 'mod.tpl/designer',
+                        isvisible: false,//是否在控件面板显示，默认显示                        
+                        topAction: false,//是否加载顶部操作模板
+                    },
+                    {
+                        key: 'empty',
+                        name: '空白提示',
+                        icon: 'layui-icon layui-icon-tips',
+                        url: 'mod.tpl/empty',
+                        isvisible: false,//是否在控件面板显示，默认显示                        
+                        bottomAction: true,//是否加载顶部操作模板
                     },
                     {
                         key: 'panel',
                         name: '面板',
                         icon: 'layui-icon layui-icon-layer',
-                        url: 'mod.tpl/panel'
+                        url: 'mod.tpl/panel',
+                        bottomAction: true,//是否加载底部操作模板
                     },
                     {
                         key: 'card',
                         name: '卡片面板',
                         icon: 'layui-icon layui-icon-layer',
-                        url: 'mod.tpl/card'
+                        url: 'mod.tpl/card',                        
+                        bottomAction: true,//是否加载底部操作模板
                     }
                 ]
             }
@@ -66,23 +81,25 @@ layui.define(function (exports) {
          * @param {控件key} controlkey 
          * @returns 
          */
-        getControl: function (groupid, controlkey) {
+        getControl: function (controlkey, groupid) {
             var that = this;
             var groups = that.groups;
             var control = null;
+            var groupid = groupid || '';
 
             $.each(groups, function (index, item) {
                 if (null != control) {
                     return false;
                 }
-                if (undefined != item.controls && null != item.controls
-                    && item.id === groupid && item.controls.length > 0) {
-                    $.each(item.controls, function (i, ctr) {
+
+                var controls = item.controls || [];
+                if ((item.id === groupid || groupid === '') && controls.length > 0) {
+                    $.each(controls, function (i, ctr) {
                         if (ctr.key === controlkey) {
                             control = ctr;
                             return false;
                         }
-                    })
+                    });
                 }
             });
 

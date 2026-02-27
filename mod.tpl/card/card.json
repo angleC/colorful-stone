@@ -2,7 +2,7 @@
     "id": "-1",
     "index": "-1",
     "title": "单行文本",
-    "tag": "card",
+    "key": "card",
     "type": "card",
     "tagIcon": "card",
     "maxlength": null,

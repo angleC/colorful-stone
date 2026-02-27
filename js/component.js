@@ -22,7 +22,7 @@ class CustomComponent extends HTMLElement {
         // this.addEventListener('click', () => this.handleClick());
         const displayValue = window.getComputedStyle(this).display;
         if (!displayValue) {
-            this.style.display = 'inline-block';
+            this.style.display = 'block';
         }
         console.log('2. 挂载回调：元素已加入DOM');
     }

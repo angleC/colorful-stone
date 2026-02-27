@@ -118,13 +118,36 @@
     color: #787be8
 }
 
+.drag {
+    /* 1. 取消100%宽度，让宽度自适应内容 */
+    width: auto !important;
+    /* 2. 行内块级，宽度由内容决定 */
+    display: inline-block !important;
+    /* 3. 盒模型确保边框包含在内边距内 */
+    box-sizing: border-box !important;
+    /* 4. 清除多余边距，紧贴内容 */
+    margin: 0 !important;
+    padding: 8px 12px !important;
+    /* 与原元素内边距一致 */
+    /* 5. 虚线框样式（仅包裹内容） */
+    border: 1px dashed #2196f3 !important;
+    border-radius: 4px !important;
+    background: rgba(227, 242, 253, 0.8) !important;
+    /* 6. 避免换行，确保内容一行显示 */
+    white-space: nowrap !important;
+    /* 7. 层级保证 */
+    z-index: 9999 !important;
+}
+
 .ghost {
-    border: 1px dashed #e06c1d;
-    outline-width: 0;
-    height: 39px;
+    width: fit-content;
     box-sizing: border-box;
+    outline-width: 0;
     content: '';
-    padding: 0;
+    border: 1px dashed #e06c1d;
+    background: #f5f5f5;
+    opacity: 0.6;
+    padding: 0; 
 }
 
 .ghost div {
@@ -142,7 +165,7 @@
     outline-offset: 0;
 }
 
-#formDesignerForm .layui-form-item {
+.layui-form-item {
     position: relative;
     margin-bottom: 0px;
 }
@@ -151,7 +174,7 @@
     padding: 5px 5px;
 }
 
-#formDesignerForm .layui-form-item:hover {
+.layui-form-item:hover {
     background-color: #e9f4fd !important;
 }
 

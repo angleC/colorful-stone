@@ -76,9 +76,31 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
                 that.loadControlList(() => {
                     that.bindSortable();
                 });
+
+                that.loadDesignerContainer();
             }
         }
 
+        tplLoader.render(tplOpts);
+    }
+    /**
+     * 加载设计区容器
+     */
+    Class.prototype.loadDesignerContainer = function () {
+        var that = this;
+        var options = that.config;
+        var designerContainer = controls.getControl('container', 'designerContainer');
+        var tplOpts = {
+            tplUrl: options.designerContainerTpl,
+            data: designerContainer,
+            showLoading: true,
+            success: function (html) {
+                var $html = $(html);
+                $('#' + options.mainBodyId).append($html);
+
+                that.initTargetSortable($html[0]);
+            }
+        }
         tplLoader.render(tplOpts);
     }
 
@@ -95,7 +117,9 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
                     pull: 'clone', //克隆本区域元素到其他区域
                     put: false, //禁止本区域实现拖动或拖入
                 },
-                ghostClass: "ghost",
+                // ghostClass: "ghost",
+                dragClass: 'drag',
+                ghostClass: 'ghost',
                 sort: false,
                 animation: 150,
                 onEnd: function (evt) {
@@ -258,6 +282,13 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
     Class.prototype.addActive = function ($item) {
         var that = this;
         $item.addClass('active');
+
+        var pCmp = that.getNearestNode($item, that.config.cmpNodeName);
+        var isRoot = that.isRootXComponentNode(pCmp);
+        if (isRoot) {
+            return;
+        }
+
         const tActionUrl = (that.config.topAction || false) ? `/mod.tpl/action/topaction.html` : '';
         const bActionUrl = (that.config.bottomAction || false) ? `/mod.tpl/action/bottomaction.html` : '';
         var options = {
@@ -422,6 +453,23 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
         return $closestNode;
     }
     /**
+     * 判断是否为根节点（即没有外层同类组件）
+     * @param {组件dom元素} $xComponent 
+     * @returns 
+     */
+    Class.prototype.isRootXComponentNode = function ($xComponent) {
+        var that = this;
+        const nodeName = that.config.cmpNodeName;
+        // 边界处理：如果没找到x-component，直接返回false
+        if (!$xComponent.length) return false;
+
+        // 检查该x-component的所有祖先节点中是否还有x-component
+        const $parentXComponent = $xComponent.parents(nodeName);
+
+        // 没有外层x-component祖先 → 是根节点
+        return $parentXComponent.length === 0;
+    }
+    /**
      * 生成 id
      * @param {标记} tag 
      * @returns 
@@ -471,6 +519,8 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
         bottomAction: true,//是否加载底部操作模板
         cmpNodeName: 'x-component',
         sortableContainer: '.sortable-container',//拖拽容器标记
+        designerContainerTpl: './mod.tpl/desingerContainer/desingerContainer.html',//设计区容器模板
+        mainBodyId: 'main-body',//设计区主体容器ID
     }
 
     formDesigner.render = function (options) {

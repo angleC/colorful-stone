@@ -1,6 +1,6 @@
 <div class="components-title"> {{=d.label}} </div>
 <div class="components-draggable" id="{{=d.id}}">
-    {{# layui.each(d.controls, function(index,item) { }}
+    {{# layui.each(d.controls, function(index,item) { if(item.isvisible === false){ return; } }}
         <ol data-tag="{{=item.key}}">
              <div class="icon">
                 <i class="{{=item.icon}}"></i>

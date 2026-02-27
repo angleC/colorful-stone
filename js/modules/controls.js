@@ -33,12 +33,18 @@ layui.define(function (exports) {
                         url: 'mod.tpl/button'
                     }
                 ]
-            },
-            
+            },            
             {
                 id: 'container',
                 label: '容器组件',
                 controls: [
+                    {
+                        key: 'designerContainer',
+                        name: '设计区容器',
+                        icon: 'layui-icon layui-icon-layer',
+                        url: 'mod.tpl/designerContainer',
+                        isvisible: false//是否在控件面板显示，默认显示
+                    },
                     {
                         key: 'panel',
                         name: '面板',

@@ -1,6 +1,7 @@
-layui.define(function(exports) {
-  "use strict";
-    var $ = layui.jquery;
+layui.define(['scriptLoader'], function (exports) {
+    "use strict";
+    var $ = layui.jquery,
+        scriptLoader = layui.scriptLoader;
 
     var moduleInvoker = {
         /**
@@ -10,13 +11,13 @@ layui.define(function(exports) {
          * @param {Array} args - 传递给方法的参数数组
          * @returns {Promise<any>} 返回方法执行结果
          */
-        callModuleMethod: function(moduleNames, methodName, args = []) {
+        callModuleMethod: function (moduleNames, methodName, args = []) {
             return new Promise((resolve, reject) => {
                 // 统一处理模块名格式（转为数组）
                 const modules = Array.isArray(moduleNames) ? moduleNames : [moduleNames];
-                
+
                 // 使用layui.use加载指定模块
-                layui.use(modules, function() {
+                layui.use(modules, function () {
                     try {
                         // 1. 获取目标模块实例
                         // 如果是单个模块，直接取第一个；如果是多个，返回模块对象集合
@@ -40,7 +41,7 @@ layui.define(function(exports) {
                             if (typeof targetModule[methodName] !== 'function') {
                                 throw new Error(`模块 ${modules[0]} 中不存在方法 ${methodName}`);
                             }
-                             // 3. 确保 args 是可迭代对象（数组/类数组）
+                            // 3. 确保 args 是可迭代对象（数组/类数组）
                             const validArgs = Array.isArray(args) ? args : [args];
                             // 4. 调用方法并传递参数
                             const result = targetModule[methodName](validArgs);
@@ -65,15 +66,18 @@ layui.define(function(exports) {
          * @param {Array} args - 方法参数
          * @returns {Promise<any>}
          */
-        loadScriptAndCallModule: function(scriptUrl, moduleName, methodName, args = []) {
+        loadScriptAndCallModule: function (scriptUrl, moduleName, methodName, args = []) {
             // 先加载外部脚本，再调用模块方法
             return new Promise(async (resolve, reject) => {
                 try {
                     // 加载外部脚本（复用之前封装的loadScript方法）
                     await this.loadScript(scriptUrl);
-                    let extModule = {};
-                    extModule[moduleName]=`{/}/mod.tpl/${moduleName}/${moduleName}`;
-                    layui.extend(extModule);
+                    let modulePath = `{/}/mod.tpl/${moduleName}/${moduleName}`;
+                    if (!(layui[moduleName] || layui.modules[moduleName])) {
+                        layui.extend({
+                            [moduleName]: modulePath
+                        });
+                    }
                     // 调用模块方法
                     const result = await this.callModuleMethod(moduleName, methodName, args);
                     resolve(result);
@@ -84,15 +88,8 @@ layui.define(function(exports) {
         },
 
         // 复用之前的脚本加载方法（保持完整性）
-        loadScript: function(url) {
-            return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = url;
-                script.async = true;
-                script.onload = () => resolve();
-                script.onerror = () => reject(new Error(`加载脚本失败: ${url}`));
-                document.head.appendChild(script);
-            });
+        loadScript: function (url) {
+            return scriptLoader.loadScript(url);
         }
     };
 

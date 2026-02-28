@@ -1,16 +1,58 @@
 {
-  "id": "-1",
-  "index": "-1",
-  "label": "按钮",
-  "tag": "input",
-  "type":"button",
-  "tagIcon": "input",
-  "width": "100%",
-  "readonly": false,
-  "disabled": false,
-  "required": true,
-  "hideLabel": false,
-  "expression": "",
-  "document": "",
-  "class":""
+  "id": {
+    "value": "button",
+    "ctrlType": "labelInput",
+    "label": "组件ID"
+  },
+  "index":{
+    "value": "-1",
+    "ctrlType": "labelInput",
+    "label": "索引"
+  },
+  "label": {
+    "value": "按钮",
+    "ctrlType": "labelInput",
+    "label": "名称"
+  },
+  "key": {
+    "value": "input",
+    "ctrlType": "labelInput",
+    "label": "标签",
+    "visible": false,
+    "disabled": true
+  },
+  "type":{
+    "value": "button",
+    "ctrlType": "labelInput",
+    "label": "类型",
+    "visible": false,
+    "disabled": true
+  },
+  "tagIcon": {
+    "value": "button",
+    "ctrlType": "labelInput",
+    "label": "图标",
+    "visible": false,
+    "disabled": true
+  },
+  "width": {
+    "value": "100%",
+    "ctrlType": "labelInput",
+    "label": "宽度"
+  },
+  "disabled": {
+    "value": false,
+    "ctrlType": "labelInput",
+    "label": "禁用"
+  },
+  "class":{
+    "value": "",
+    "ctrlType": "labelInput",
+    "label": "样式类名"
+  },
+  "style":{
+    "value": "",
+    "ctrlType": "labelInput",
+    "label": "样式"
+  }
 }

@@ -1,5 +1,6 @@
-layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadResources', 'controls'], function (exports) {
+layui.define(['utils', 'htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadResources', 'controls'], function (exports) {
     var $ = layui.jquery,
+        utils = layui.utils,
         layer = layui.layer,
         laytpl = layui.laytpl,
         element = layui.element,
@@ -220,12 +221,12 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
         if (undefined == ctrConfig || null == ctrConfig) {
             return;
         }
-        var key = ctrConfig.key;
+        var key = ctrConfig.key.value || ctrConfig.key || '';
         var options = {
             control: ctrConfig,
             updateProperty: function (properties) {
                 var _id = that.generateId(key);
-                properties.id = _id;
+                properties.id.value = _id;
             },
             success: function (_html, properties) {
                 const $tag = $(_html);
@@ -242,9 +243,9 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
                     $item.remove();
                 }
 
-                that.selectItem($tag, true);
-
                 that.updateViewModel(properties, key === 'designer');
+
+                that.selectItem($tag, true);
 
                 that.bindClick();//绑定按钮事件
 
@@ -254,6 +255,39 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
         let scripturl = ctrConfig.url + `/${key}.js`;
         moduleInvoker.loadScriptAndCallModule(scripturl, key, 'render', options).then((result) => {
             console.log('组件渲染完成', result);
+        });
+    }
+    /**
+     * 渲染控件属性配置面板
+     */
+    Class.prototype.renderCtrlComponentProperty = function (property) {
+        var that = this;
+        if (undefined == property || null == property) {
+            return;
+        }
+        var ctrlType = property.ctrlType;
+        var ctrConfig = controls.getControl(ctrlType);
+        if (undefined == ctrConfig) {
+            return;
+        }
+        var options = {
+            control: ctrConfig,
+            updateProperty: function (properties) {
+                var _id = that.generateId(ctrlType);
+                _id = `properties_${_id}`;
+                properties.id.value = _id;
+                properties.label.value = property.label;
+                properties.componentStyle.value = 'display: block;';
+            },
+            success: function (_html, properties) {
+                const $tag = $(_html);
+                const $tarItem = $('#' + that.config.ctrlPropertyPannelId);
+                $tag.prependTo($tarItem);
+            }
+        }
+        let scripturl = ctrConfig.url + `/${ctrlType}.js`;
+        moduleInvoker.loadScriptAndCallModule(scripturl, ctrlType, 'render', options).then(() => {
+            console.log('组件属性渲染完成：' + property.label);
         });
     }
     /**
@@ -285,14 +319,16 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
         var that = this;
         $item.addClass('active');
 
+        var key = $item.data('key');
+        var control = controls.getControl(key);
+
         var pCmp = that.getNearestNode($item, that.config.cmpNodeName);
         var isRoot = that.isRootXComponentNode(pCmp);
         if (isRoot) {
+            that.loadControlProperty(control, $item);
+
             return;
         }
-
-        var key = $item.data('key');
-        var control = controls.getControl(key);
         const tActionUrl = (control.topAction || false) ? `/mod.tpl/action/topaction.html` : '';
         const bActionUrl = (control.bottomAction || false) ? `/mod.tpl/action/bottomaction.html` : '';
         var options = {
@@ -320,6 +356,30 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
             $item.append($bAction);
 
             that.bindActionClick($item);
+
+            that.loadControlProperty($item);
+        });
+    }
+    /**
+     * 加载组件控件属性配置信息
+     * @param {当前选中DOM元素} $item 
+     */
+    Class.prototype.loadControlProperty = function ($item) {
+        var that = this;
+        if (null == $item || undefined === $item) {
+            return;
+        }
+        var id = $item.data('id');
+        var ctrlProperty = that.getViewModelProperty(id);
+        if (undefined == ctrlProperty) {
+            var key = $item.data('key');
+            ctrlProperty = controls.getControl(key);
+        }
+
+        const $tarItem = $('#' + that.config.ctrlPropertyPannelId);
+        $tarItem.empty();
+        $.each(ctrlProperty, function (key, value) {
+            that.renderCtrlComponentProperty(value);
         });
     }
     /**
@@ -337,13 +397,6 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
             const actionName = $this.data('action');
             var cmpNodeName = that.config.cmpNodeName;
 
-            // layui.use('action', function () {
-            //     var action = layui.action;
-            //     var cmpNodeName = that.config.cmpNodeName;
-            //     var result = action.invokeAction(actionName, that.getNearestNode($this, cmpNodeName));
-
-            //     console.info(result);
-            // });
             const $cmp = that.getNearestNode($this, cmpNodeName);
             switch (actionName) {
                 case "copy":
@@ -369,6 +422,8 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
 
         // 1. 复制节点（clone(true) 表示深复制，含事件；clone() 仅复制结构）
         const $cloned = $original.clone(true);
+
+
 
         // 2. 重置唯一标识和内容
         const newId = `originalXComponent_${Date.now()}`;
@@ -483,9 +538,14 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
     Class.prototype.generateId = function (tag) {
         var that = this;
         let options = that.config;
-        options.generateId = options.generateId + 1;
 
-        return tag + '_' + options.generateId;
+        var genId = utils.generateId();
+        while (options.generateIds.indexOf(genId) !== -1) {
+            genId = utils.generateId();
+        }
+        options.generateIds.push(genId);
+
+        return genId;
     }
 
     Class.prototype.loadControlList = function (complete) {
@@ -512,6 +572,23 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
 
             tplLoader.render(tplOpts);
         });
+    }
+    /**
+     * 获取视图的控件属性
+     * @param {组件控件id} ctrId 
+     * @returns 
+     */
+    Class.prototype.getViewModelProperty = function (ctrId) {
+        var that = this;
+        var options = that.config;
+        var viewModel = options.viewModel;
+        var widgets = viewModel.widgets || [];
+
+        for (var i = 0; i < widgets.length; i++) {
+            if (widgets[i].id.value === ctrId) {
+                return widgets[i];
+            }
+        }
     }
     /**
      * 更新视图模型
@@ -557,8 +634,18 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
         var widgets = viewModel.widgets || [];
         if (widgets.length > 0) {
             widgets.forEach(function (w) {
-                if (w.id === ctrId) {
+                if (w.id.value === ctrId) {
                     widgets.splice(widgets.indexOf(w), 1);
+                    return false;
+                }
+            });
+        }
+
+        var generateIds = options.generateIds || [];
+        if (generateIds.length > 0) {
+            generateIds.forEach(function (w) {
+                if (w === ctrId) {
+                    generateIds.splice(generateIds.indexOf(w), 1);
                     return false;
                 }
             });
@@ -569,12 +656,13 @@ layui.define(['htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker', 'loadR
         version: '1.0.0',
         data: [],//记录数据信息
         viewModel: {},//记录视图模型
-        generateId: 0,//组件自增加id
+        generateIds: [],//组件id记录，避免重复
         selItems: [],//选中的元素项
         isview: false, //标记是否为视图模式还是设计模式
         cmpNodeName: 'x-component',
         sortableContainer: '.sortable-container',//拖拽容器标记
         mainBodyId: 'main-body',//设计区主体容器ID
+        ctrlPropertyPannelId: 'columnProperty',//属性面板容器ID
     }
 
     formDesigner.render = function (options) {

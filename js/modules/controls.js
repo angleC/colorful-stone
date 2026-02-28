@@ -47,7 +47,7 @@ layui.define(function (exports) {
                         name: '设计区容器',
                         icon: 'layui-icon layui-icon-layer',
                         url: 'mod.tpl/designer',
-                        isvisible: false,//是否在控件面板显示，默认显示                        
+                        visible: false,//是否在控件面板显示，默认显示                        
                         topAction: false,//是否加载顶部操作模板
                     },
                     {
@@ -55,7 +55,7 @@ layui.define(function (exports) {
                         name: '空白提示',
                         icon: 'layui-icon layui-icon-tips',
                         url: 'mod.tpl/empty',
-                        isvisible: false,//是否在控件面板显示，默认显示                        
+                        visible: false,//是否在控件面板显示，默认显示                        
                         bottomAction: true,//是否加载顶部操作模板
                     },
                     {

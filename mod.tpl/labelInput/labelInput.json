@@ -1,22 +1,108 @@
 {
-  "id": "-1",
-  "index": "-1",
-  "label": "单行文本",
-  "key": "labelInput",
-  "type":"text",
-  "tagIcon": "input",
-  "placeholder": "请输入",
-  "defaultValue": null,
-  "labelWidth": 110,
-  "width": "100%",
-  "clearable": true,
-  "maxlength": null,
-  "showWordLimit": false,
-  "readonly": false,
-  "disabled": false,
-  "required": true,
-  "hideLabel": false,
-  "expression": "",
-  "document": "",
-  "class":""
+  "id": {
+    "value": "button",
+    "ctrlType": "labelInput",
+    "label": "组件ID"
+  },
+  "index": {
+    "value": "-1",
+    "ctrlType": "labelInput",
+    "label": "索引"
+  },
+  "label": {
+    "value": "单行文本",
+    "ctrlType": "labelInput",
+    "label": "标签"
+  },
+  "key": {
+    "value": "input",
+    "ctrlType": "labelInput",
+    "label": "标签文本框",
+    "visible": false,
+    "disabled": true
+  },
+  "type": {
+    "value": "labelInput",
+    "ctrlType": "labelInput",
+    "label": "类型",
+    "visible": false,
+    "disabled": true
+  },
+  "tagIcon": {
+    "value": "input",
+    "ctrlType": "labelInput",
+    "label": "图标",
+    "visible": false,
+    "disabled": true
+  },
+  "placeholder": {
+    "value": "请输入...",
+    "ctrlType": "labelInput",
+    "label": "占位文本"
+  },
+  "labelWidth": {
+    "value": "110px",
+    "ctrlType": "labelInput",
+    "label": "标签宽度"
+  },
+  "width": {
+    "value": "100%",
+    "ctrlType": "labelInput",
+    "label": "宽度"
+  },
+  "clearable": {
+    "value": true,
+    "ctrlType": "labelInput",
+    "label": "清空按钮"
+  },
+  "maxlength": {
+    "value": 255,
+    "ctrlType": "labelInput",
+    "label": "最大长度"
+  },
+  "showWordLimit": {
+    "value": false,
+    "ctrlType": "labelInput",
+    "label": "显示字数统计"
+  },
+  "readonly": {
+    "value": false,
+    "ctrlType": "labelInput",
+    "label": "只读"
+  },
+  "disabled": {
+    "value": false,
+    "ctrlType": "labelInput",
+    "label": "禁用"
+  },
+  "required": {
+    "value": false,
+    "ctrlType": "labelInput",
+    "label": "必填"
+  },
+  "hideLabel": {
+    "value": false,
+    "ctrlType": "labelInput",
+    "label": "隐藏标签"
+  },
+  "class": {
+    "value": "",
+    "ctrlType": "labelInput",
+    "label": "样式类名"
+  },
+  "componentClass": {
+    "value": "",
+    "ctrlType": "labelInput",
+    "label": "组件样式类名"
+  },
+  "style": {
+    "value": "",
+    "ctrlType": "labelInput",
+    "label": "样式"
+  },
+  "componentStyle": {
+    "value": "",
+    "ctrlType": "labelInput",
+    "label": "组件样式"
+  }
 }

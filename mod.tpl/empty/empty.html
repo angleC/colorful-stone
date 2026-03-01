@@ -1,5 +1,5 @@
-    <x-component data-key="{{=d.key}}" style="display: block;">
+    <x-component data-key="{{=d.key.value}}"  data-id="{{=d.id.value}}" style="display: block;">
         <div class="layui-row layui-empty">
-            {{=d.text || '暂无数据'}}
+            {{=d.text.value || '暂无数据'}}
         </div>
     </x-component>

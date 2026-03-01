@@ -18,20 +18,16 @@ class CustomComponent extends HTMLElement {
 
     // 3. 挂载到DOM时执行（最常用）
     connectedCallback() {
-        // 可操作DOM、绑定事件、发请求
-        // this.addEventListener('click', () => this.handleClick());
         const displayValue = window.getComputedStyle(this).display;
         if (!displayValue) {
             this.style.display = 'block';
         }
         console.log('2. 挂载回调：元素已加入DOM');
     }
-
     // 4. 从DOM移除时执行（清理资源）
     disconnectedCallback() {
         // console.log('3. 移除回调：元素已离开DOM');
         // 清理事件、定时器等
-        this.removeEventListener('click', this.handleClick);
         clearInterval(this.timer); // 示例：清理定时器
     }
 

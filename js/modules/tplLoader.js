@@ -46,7 +46,6 @@ layui.define(['jquery', 'layer', 'laytpl', 'htmlLoader'], function (exports) {
 
             htmlLoader.loadHtml(options.tplUrl)
                 .then(function (result) {
-                    console.info(result);
                     if (result.status === 'success') {
                         const content = result.content;
                         var tpl = laytpl(content);

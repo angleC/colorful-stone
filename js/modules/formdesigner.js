@@ -49,15 +49,27 @@ layui.define(['utils', 'htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker
         var that = this;
         that.index = ++formDesigner.index;
         that.config = $.extend(true, {}, that.config, formDesigner.config, options);
+        that.initialize();
 
         that.render();
+    }
+    /**
+     * 初始化
+     */
+    Class.prototype.initialize = function () {
+        var that = this;
+
+        that.config.viewModel = $.extend(true, {
+            fromId: that.generateId(),
+            description: 'colorful stone form designer, a low-code form design tool.',
+            widgets: []
+        }, that.config.viewModel);
+
     }
 
     Class.prototype.render = function () {
         let that = this;
         let options = that.config;
-
-        console.log(that, options);
 
         options.elem = $(options.elem);
         options.id = options.id || options.elem.attr('id') || that.index;
@@ -247,7 +259,7 @@ layui.define(['utils', 'htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker
 
                 that.selectItem($tag, true);
 
-                that.bindClick();//绑定按钮事件
+                that.bindXComponentClick();//绑定按钮事件
 
                 that.initAllTargetSortable();
             }
@@ -287,7 +299,7 @@ layui.define(['utils', 'htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker
         }
         let scripturl = ctrConfig.url + `/${ctrlType}.js`;
         moduleInvoker.loadScriptAndCallModule(scripturl, ctrlType, 'render', options).then(() => {
-            console.log('组件属性渲染完成：' + property.label);
+            // console.log('组件属性渲染完成：' + property.label);
         });
     }
     /**
@@ -308,8 +320,8 @@ layui.define(['utils', 'htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker
             return;
         }
 
-        $.each(selItems, function (i, item) {
-            that.addActive(item);
+        $.each(selItems, function (i, $item) {
+            that.addActive($item);
         });
     }
     /**
@@ -325,7 +337,7 @@ layui.define(['utils', 'htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker
         var pCmp = that.getNearestNode($item, that.config.cmpNodeName);
         var isRoot = that.isRootXComponentNode(pCmp);
         if (isRoot) {
-            that.loadControlProperty(control, $item);
+            that.loadControlProperty($item);
 
             return;
         }
@@ -477,7 +489,7 @@ layui.define(['utils', 'htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker
     /**
      * 绑定点击事件
      */
-    Class.prototype.bindClick = function () {
+    Class.prototype.bindXComponentClick = function () {
         var that = this
         var options = that.config;
         const cls = that.config.cmpNodeName;
@@ -486,7 +498,8 @@ layui.define(['utils', 'htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker
             //当 div 为嵌套关系的时候 阻止事件冒泡
             e.preventDefault();
             e.stopPropagation();
-
+            if (e.handled) return;
+            e.handled = true;
             var $tar = $(this);
             // var clsName = cls.replace('.', '');
             // if (!$tar.hasClass(clsName)) {
@@ -600,10 +613,12 @@ layui.define(['utils', 'htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker
         var viewModel = options.viewModel;
         var isRoot = isRoot || false;
 
-        if (isRoot) {
-            that.config.viewModel = $.extend(true, {}, viewModel, ctrProperties);
-            return;
-        }
+        // if (isRoot) {
+        //     that.config.viewModel = $.extend(true, {}, viewModel, ctrProperties);
+
+        //     console.log('更新视图模型', that.config.viewModel);
+        //     return;
+        // }
 
         var widgets = viewModel.widgets || [];
         const isExist = false;
@@ -622,6 +637,8 @@ layui.define(['utils', 'htmlLoader', 'tplLoader', 'scriptLoader', 'moduleInvoker
 
             that.config.viewModel.widgets = widgets;
         }
+
+        console.log('更新视图模型', that.config.viewModel);
     }
     /**
      * 从视图模型中删除组件

@@ -1,22 +1,58 @@
 {
-  "id": "-1",
-  "index": "-1",
-  "label": "单行文本",
-  "key": "empty",
-  "type":"container",
-  "text": "暂无数据",
-  "placeholder": "请输入",
-  "defaultValue": null,
-  "labelWidth": 110,
-  "width": "100%",
-  "clearable": true,
-  "maxlength": null,
-  "showWordLimit": false,
-  "readonly": false,
-  "disabled": false,
-  "required": true,
-  "hideLabel": false,
-  "expression": "",
-  "document": "",
-  "class":""
+  "id": {
+    "value": "-1",
+    "ctrlType": "labelInput",
+    "label": "组件ID"
+  },
+  "index": {
+    "value": "-1",
+    "ctrlType": "labelInput",
+    "label": "索引"
+  },
+  "label": {
+    "value": "单行文本",
+    "ctrlType": "labelInput",
+    "label": "标签"
+  },
+  "key": {
+    "value": "empty",
+    "ctrlType": "labelInput",
+    "label": "标签",
+    "visible": false,
+    "disabled": true
+  },
+  "type": {
+    "value": "container",
+    "ctrlType": "labelInput",
+    "label": "类型",
+    "visible": false,
+    "disabled": true
+  },
+  "tagIcon": {
+    "value": "empty",
+    "ctrlType": "labelInput",
+    "label": "图标",
+    "visible": false,
+    "disabled": true
+  },
+  "text": {
+    "value": "暂无数据",
+    "ctrlType": "labelInput",
+    "label": "文本"
+  },
+  "width": {
+    "value": "100%",
+    "ctrlType": "labelInput",
+    "label": "宽度"
+  },
+  "document": {
+    "value": "",
+    "ctrlType": "labelInput",
+    "label": "说明"
+  },
+  "class": {
+    "value": "",
+    "ctrlType": "labelInput",
+    "label": "样式类名"
+  }
 }

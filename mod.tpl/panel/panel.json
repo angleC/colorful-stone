@@ -1,23 +1,76 @@
 {
-    "id": "-1",
-    "index": "-1",
-    "label": "单行文本",
-    "key": "panel",
-    "type": "panel",
-    "tagIcon": "panel",
-    "defaultValue": null,
-    "labelWidth": 110,
-    "width": "100%",
-    "clearable": true,
-    "maxlength": null,
-    "showWordLimit": false,
-    "readonly": false,
-    "disabled": false,
-    "required": true,
-    "hideLabel": false,
-    "expression": "",
-    "document": "",
-    "class": "",
-    "minHeight": "50px",
-    "minWidth": "100px"
+    "id": {
+        "value": "-1",
+        "ctrlType": "labelInput",
+        "label": "组件ID"
+    },
+    "index": {
+        "value": "-1",
+        "ctrlType": "labelInput",
+        "label": "索引"
+    },
+    "label": {
+        "value": "面板",
+        "ctrlType": "labelInput",
+        "label": "标签"
+    },
+    "key": {
+        "value": "panel",
+        "ctrlType": "labelInput",
+        "label": "标签",
+        "visible": false,
+        "disabled": true
+    },
+    "type": {
+        "value": "panel",
+        "ctrlType": "labelInput",
+        "label": "类型",
+        "visible": false,
+        "disabled": true
+    },
+    "width": {
+        "value": "100%",
+        "ctrlType": "labelInput",
+        "label": "宽度"
+    },
+    "height": {
+        "value": "100%",
+        "ctrlType": "labelInput",
+        "label": "高度"
+    },
+    "readonly": {
+        "value": false,
+        "ctrlType": "labelInput",
+        "label": "只读"
+    },
+    "disabled": {
+        "value": false,
+        "ctrlType": "labelInput",
+        "label": "禁用"
+    },
+    "expression": {
+        "value": "",
+        "ctrlType": "labelInput",
+        "label": "表达式"
+    },
+    "document": {
+        "value": "",
+        "ctrlType": "labelInput",
+        "label": "说明"
+    },
+    "class": {
+        "value": "",
+        "ctrlType": "labelInput",
+        "label": "样式类名"
+    },
+    "minHeight": {
+        "value": "50px",
+        "ctrlType": "labelInput",
+        "label": "最小高度"
+    },
+    "minWidth": {
+        "value": "100px",
+        "ctrlType": "labelInput",
+        "label": "最小宽度"
+    }
 }

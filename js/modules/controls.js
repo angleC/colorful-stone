@@ -12,28 +12,28 @@ layui.define(function (exports) {
                         key: 'label',
                         name: '标签',
                         icon: 'layui-icon layui-icon-note',
-                        url: 'mod.tpl/label',                        
+                        url: 'mod.tpl/label',
                         bottomAction: true,//是否加载底部操作模板
                     },
                     {
                         key: 'input',
                         name: '文本框',
                         icon: 'layui-icon layui-icon-layer',
-                        url: 'mod.tpl/input',                        
+                        url: 'mod.tpl/input',
                         bottomAction: true,//是否加载底部操作模板
                     },
                     {
                         key: 'labelInput',
                         name: '标签文本框',
                         icon: 'layui-icon layui-icon-form',
-                        url: 'mod.tpl/labelInput',                        
+                        url: 'mod.tpl/labelInput',
                         bottomAction: true,//是否加载底部操作模板
                     },
                     {
                         key: 'button',
                         name: '按钮',
                         icon: 'layui-icon layui-icon-layer',
-                        url: 'mod.tpl/button',                        
+                        url: 'mod.tpl/button',
                         bottomAction: true,//是否加载底部操作模板
                     }
                 ]
@@ -69,7 +69,7 @@ layui.define(function (exports) {
                         key: 'card',
                         name: '卡片面板',
                         icon: 'layui-icon layui-icon-layer',
-                        url: 'mod.tpl/card',                        
+                        url: 'mod.tpl/card',
                         bottomAction: true,//是否加载底部操作模板
                     }
                 ]

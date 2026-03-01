@@ -1,6 +1,6 @@
-<x-component data-key="{{=d.key}}" style="display: block;">
-    <div class="layui-card" style="min-height: {{=d.minHeight}};min-width: {{=d.minWidth}};">
-        <div class="layui-card-header">{{=d.title}}</div>
+<x-component data-key="{{=d.key.value}}"  data-id="{{=d.id.value}}" style="display: block;">
+    <div class="layui-card" style="min-height: {{=d.minHeight.value}};min-width: {{=d.minWidth.value}};">
+        <div class="layui-card-header">{{=d.title.value}}</div>
         <div class="layui-card-body sortable-container">
         </div>
     </div>
